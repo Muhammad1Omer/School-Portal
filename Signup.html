@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Signup</title>
+    <style>
+        body {
+            background-color: #D7E8FB;
+            height: 100vh;
+            background-position: center;
+            color: #034078;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            margin: 0;
+        }
+        .bg-image {
+            background-image: url('AcademicLIfe.jpg');
+            filter: blur(8px);
+            -webkit-filter: blur(8px);
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: fixed;
+            left: 0;
+            right: 0;
+            z-index: -1;
+        }
+        .group-box {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+            width: 350px;
+            transition: transform 0.3s ease-in-out;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        .group-box:hover {
+            transform: scale(1.03);
+        }
+        .group-box-title {
+            text-align: center;
+            font-size: 24px;
+            color: #034078;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            transition: border 0.3s ease-in-out;
+        }
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="number"]:focus {
+            border-color: #3498db;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .error-message {
+            color: red;
+        }
+            .bg-image {
+                background-image: url('AcademicLIfe.jpg');
+                filter: blur(8px);
+                -webkit-filter: blur(8px);
+                height: 100%;
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                position: fixed;
+                left: 0;
+                right: 0;
+                z-index: -1;
+            }
+            .toggle-btn {
+                position: fixed;
+                top: 20px;
+                left: 10px; 
+                width: 40px;
+                height: 40px;
+                background: #90EE90;
+                cursor: pointer;
+                border-radius: 20px; 
+                text-align: center;
+                line-height: 40px; 
+                z-index: 1000; 
+            }
+            .toggle-btn:hover {
+                background-color: #76c76a;
+            }
+            .sidebar {
+                height: 100vh;
+                width: 250px; 
+                position: fixed;
+                z-index: 1;
+                top: 0;
+                left: 0;
+                background-color: #f0f0f0;
+                overflow-x: hidden;
+                transition: 0.5s; 
+                padding-top: 20px;
+            }
+            .sidebar.collapsed {
+                width: 0;
+            }
+            .content {
+                margin-left: 250px; 
+                padding: 20px;
+                flex: 1;
+                overflow-y: auto; 
+            }
+            .content.collapsed {
+                margin-left: 0;
+            }
+            ul {
+                list-style: none;
+                padding: 0;
+            }
+            li {
+                padding: 10px;
+                margin-bottom: 8px;
+                cursor: pointer;
+            }
+            li:hover {
+                background-color: #ddd;
+            }
+            button {
+                padding: 10px 20px;
+                background-color: #90EE90;
+                color: #000080; 
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                width: 100%;
+            }
+            button:hover {
+                background-color: #76c76a; 
+            }
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px; /* Add margin to separate from previous element */
+            }
+            th, td {
+                padding: 12px;
+                text-align: left;
+                border-bottom: 1px solid #ddd;
+            }
+            th {
+                background-color: #f0f0f0; 
+            }
+            .table-container {
+                background-color: #fff; 
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                padding: 20px;
+                margin-top: 20px;
+            }
+            .welcome-msg {
+                font-size: 24px;
+                color: #344955; 
+            }
+            .student-form {
+                margin-top: 20px; /* Add margin to separate from previous element */
+            }
+    
+            .form-group-box {
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .form-group-box legend {
+                font-size: 20px;
+                color: #000080;
+                margin-bottom: 10px;
+                font-weight: bold;
+            }
+            
+            .form-field {
+                margin-bottom: 15px;
+            }
+            
+            .save-button {
+                padding: 10px 20px;
+                background-color: #90EE90;
+                color: #000080; 
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                width: 100%;
+            }
+            
+            .save-button:hover {
+                background-color: #76c76a; 
+            }
+    
+            h3 {
+                color: #000080;
+                font-size: 28px;
+                font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+                margin-bottom: 20px;
+            }
+            
+            
+        </style>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const signupForm = document.getElementById('signupForm');
+                const usernameInput = document.getElementById('Username');
+                const emailInput = document.getElementById('email');
+                const passwordInput = document.getElementById('password');
+                const errorMessage = document.getElementById('errorMessage');
+            
+                signupForm.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Prevent form submission to allow validation
+            
+                    if (validateForm()) {
+                        // If validation succeeds, submit the form via AJAX
+                        const formData = {
+                            Username: usernameInput.value.trim(),
+                            email: emailInput.value.trim(),
+                            password: passwordInput.value.trim()
+                        };
+            
+                        // Send form data to server
+                        fetch('/register-Teacher', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(formData),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // Show success message or redirect if needed
+                                errorMessage.innerText = "Teacher registered successfully";
+                                // You can redirect or perform any other action upon successful registration
+                            } else {
+                                // Show error message returned from server
+                                errorMessage.innerText = data.message;
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            errorMessage.innerText = 'Error registering teacher';
+                        });
+                    }
+                });
+            
+                function validateForm() {
+                    let isValid = true;
+            
+                    // Reset previous error messages
+                    clearErrorMessages();
+            
+                    // Validate Username
+                    if (!isValidUsername(usernameInput.value.trim())) {
+                        isValid = false;
+                        displayErrorMessage(usernameInput, 'Name can only contain letters, spaces, hyphens, and apostrophes.');
+                    }
+            
+                    // Validate Email
+                    if (!isValidEmail(emailInput.value.trim())) {
+                        isValid = false;
+                        displayErrorMessage(emailInput, 'Email must contain "@" and a domain name.');
+                    }
+            
+                    // Validate Password (you can add more complex validation if needed)
+                    if (passwordInput.value.trim().length < 8) {
+                        isValid = false;
+                        displayErrorMessage(passwordInput, 'Password must be at least 8 characters long.');
+                    }
+            
+                    return isValid;
+                }
+            
+                function isValidUsername(username) {
+                    const regex = /^[A-Za-z\s'-]+$/;
+                    return regex.test(username);
+                }
+            
+                function isValidEmail(email) {
+                    const regex = /.+@.+\..+/;
+                    return regex.test(email);
+                }
+            
+                function displayErrorMessage(inputElement, message) {
+                    const errorSpan = inputElement.nextElementSibling;
+                    errorSpan.innerText = message;
+                }
+            
+                function clearErrorMessages() {
+                    const errorMessages = document.querySelectorAll('.error-message');
+                    errorMessages.forEach(function(error) {
+                        error.innerText = '';
+                    });
+                    errorMessage.innerText = ''; // Clear overall error message
+                }
+            });
+
+            function toggleSidebar() {
+                var sidebar = document.getElementById("sidebar");
+                var content = document.getElementById("content");
+                sidebar.classList.toggle("collapsed");
+                content.classList.toggle("collapsed");
+            }
+
+       
+    </script>
+</head>
+<body>   
+    <div class="bg-image"></div>
+    <div class="toggle-btn" onclick="toggleSidebar()">&#9776;</div>
+    <div class="sidebar" id="sidebar">
+        <h3>`Dashboard</h3>
+        <ul>
+            <li><button onclick="location.href='/Login' ">Login</button></li>
+        </ul>
+    </div>
+    <div class="bg-image"></div>
+    <div class="group-box">
+        <div class="group-box-title">Student Signup</div>
+        <form id="signupForm" action="/register-Teacher" method="post">
+            <div class="form-group">
+                <label for="Username">Username:</label>
+                <input type="text" id="Username" name="Username" placeholder="Username" pattern="[A-Za-z\s'-]+" title="Name can only contain letters, spaces, hyphens, and apostrophes." required>
+                <span class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" placeholder="Email" pattern=".+@.+\..+" title="Email must contain '@' and a domain name." required>
+                <span class="error-message"></span>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            <button type="submit">Register</button>
+        </form>
+        <div id="errorMessage" class="error-message"></div> <!-- Error message container -->
+    </div>
+</body>
+</html>

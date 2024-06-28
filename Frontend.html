@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Records</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            color: #000080;
+            background-color: #D7E8FB;
+            flex-direction: column; /* Ensure flex-direction is column for vertical stacking */
+        }
+        .bg-image {
+            background-image: url('AcademicLIfe.jpg');
+            filter: blur(8px);
+            -webkit-filter: blur(8px);
+            height: 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: fixed;
+            left: 0;
+            right: 0;
+            z-index: -1;
+        }
+        .toggle-btn {
+            position: fixed;
+            top: 20px;
+            left: 10px; 
+            width: 40px;
+            height: 40px;
+            background: #90EE90;
+            cursor: pointer;
+            border-radius: 20px; 
+            text-align: center;
+            line-height: 40px; 
+            z-index: 1000; 
+        }
+        .toggle-btn:hover {
+            background-color: #76c76a;
+        }
+        .sidebar {
+            height: 100vh;
+            width: 250px; 
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #f0f0f0;
+            overflow-x: hidden;
+            transition: 0.5s; 
+            padding-top: 20px;
+        }
+        .sidebar.collapsed {
+            width: 0;
+        }
+        .content {
+            margin-left: 250px; 
+            padding: 20px;
+            flex: 1;
+            overflow-y: auto; 
+        }
+        .content.collapsed {
+            margin-left: 0;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            padding: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        li:hover {
+            background-color: #ddd;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #90EE90;
+            color: #000080; 
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #76c76a; 
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px; /* Add margin to separate from previous element */
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f0f0f0; 
+        }
+        .table-container {
+            background-color: #fff; 
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .welcome-msg {
+            font-size: 24px;
+            color: #344955; 
+        }
+        .student-form {
+            margin-top: 20px; /* Add margin to separate from previous element */
+        }
+
+        .form-group-box {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group-box legend {
+            font-size: 20px;
+            color: #000080;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        .form-field {
+            margin-bottom: 15px;
+        }
+        
+        .save-button {
+            padding: 10px 20px;
+            background-color: #90EE90;
+            color: #000080; 
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .save-button:hover {
+            background-color: #76c76a; 
+        }
+
+        h3 {
+            color: #000080;
+            font-size: 28px;
+            font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+            margin-bottom: 20px;
+        }
+        
+        
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+             // Update slider value display dynamically
+             $('#age').on('input', function() {
+                var value = $(this).val();
+                $('#ageValue').text(value);
+            });
+
+            const apiUrl = 'http://localhost:8000/students';
+        
+            function fetchStudents() {
+                $.get(apiUrl, function(data) {
+                    let rows = '';
+                    data.forEach(student => {
+                        rows += `<tr>
+                            <td>${student.id}</td>
+                            <td>${student.name}</td>
+                            <td>${student.age}</td>
+                            <td>
+                                <button onclick="editStudent(${student.id})">Edit</button>
+                                <button onclick="deleteStudent(${student.id})">Delete</button>
+                            </td>
+                        </tr>`;
+                    });
+                    $('#students-table tbody').html(rows);
+                });
+            }
+        
+            $('#form').submit(function(e) {
+                e.preventDefault();
+                const id = $('#student-id').val();
+                const name = $('#name').val();
+                const age = $('#age').val();
+        
+                if (id) {
+                    // Update student
+                    $.ajax({
+                        url: `${apiUrl}/${id}`,
+                        method: 'PUT',
+                        contentType: 'application/json',
+                        data: JSON.stringify({ name, age }),
+                        success: function() {
+                            fetchStudents();
+                            $('#form')[0].reset();
+                        }
+                    });
+                } else {
+                    // Create student
+                    $.post(apiUrl, { name, age }, function() {
+                        fetchStudents();
+                        $('#form')[0].reset();
+                    });
+                }
+            });
+        
+            window.editStudent = function(id) {
+                $.get(`${apiUrl}/${id}`, function(student) {
+                    $('#student-id').val(student.id);
+                    $('#name').val(student.name);
+                    $('#age').val(student.age);
+                });
+            };
+        
+            window.deleteStudent = function(id) {
+                $.ajax({
+                    url: `${apiUrl}/${id}`,
+                    method: 'DELETE',
+                    success: function() {
+                        fetchStudents();
+                    }
+                });
+            };
+        
+            fetchStudents();
+        });
+
+        function toggleSidebar() {
+            var sidebar = document.getElementById("sidebar");
+            var content = document.getElementById("content");
+            sidebar.classList.toggle("collapsed");
+            content.classList.toggle("collapsed");
+        }
+        
+    </script>
+</head>
+<body>
+    <div class="bg-image"></div>
+    <div class="toggle-btn" onclick="toggleSidebar()">&#9776;</div>
+    <div class="sidebar" id="sidebar">
+        <h3>Main Dashboard</h3>
+        <ul>
+            <li><button onclick="location.href='/Homepage' ">Dashboard</button></li>
+            <li><button onclick="location.href='/Login' ">Logout</button></li>
+        </ul>
+    </div>
+    <div class="content" id="content">
+        <h1>Student Records</h1>
+        <div class="student-form">
+            <fieldset class="form-group-box">
+                <legend>Add / Update Student</legend>
+                <form id="form">
+                    <input type="hidden" id="student-id">
+                    <div class="form-field">
+                        <label for="name">Name:</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="age">Age:</label>
+                        <input type="range" id="age" name="age" min="0" max="100" value="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="ageLabel ageValue">
+                        <span id="ageValue" class="slider-value">0</span>
+                    </div>
+                    <button type="submit" class="save-button">Save</button>
+                </form>
+            </fieldset>
+        </div>
+
+        <div class="table-container">
+            <h2>Students List</h2>
+            <table id="students-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Student records will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
